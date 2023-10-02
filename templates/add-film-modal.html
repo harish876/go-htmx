@@ -1,0 +1,50 @@
+<div id="modal" class="uk-modal" style="display:block">
+    <div class="uk-modal-dialog uk-modal-body">
+      <h2 class="uk-modal-title">Add Movie</h2>
+      <button
+        class="uk-modal-close-outside"
+        type="button"
+        _="on click take .uk-open from #modal wait 200ms then remove #modal"
+        uk-close
+      ></button>  
+      <form
+        hx-target="body"
+        hx-put="/add-film/"
+      >
+        <div class="uk-margin">
+          <input
+            class="uk-input"
+            type="text"
+            placeholder="Director"
+            aria-label="Title"
+            name="title"
+          />
+        </div>
+  
+        <div class="uk-margin">
+          <input
+            class="uk-input"
+            type="text"
+            placeholder="Title"
+            aria-label="Director"
+            name="director"
+          />
+        </div>
+  
+        <button 
+          type="submit" 
+          class="uk-button uk-button-primary">
+  
+          Add Movie
+        </button>
+        <button
+          type="button"
+          class="uk-button uk-button-default"
+          _="on click take .uk-open from #modal wait 200ms then remove #modal"
+        >
+          Close
+        </button>
+      </form>
+    </div>
+  </div>
+  

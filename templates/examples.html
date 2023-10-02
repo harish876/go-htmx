@@ -1,0 +1,127 @@
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.8/css/uikit-core.min.css"
+      integrity="sha512-bvDaZBEDtHDwGZbo0lJ/mLVfK0yZxySg0v7N3cvhBSxbl12HIYtjej7Q2fy1k4uMuC1UeGXShAHImgAxKaimsw=="
+      crossorigin="anonymous"
+    />
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.0/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.0/dist/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/hyperscript.org"></script>
+    <style>
+      .tm-navbar-container:not(.uk-navbar-transparent) {
+        background: linear-gradient(to left, #28a5f5, #1e87f0);
+      }
+      .tm-navbar-container:not(.uk-navbar-transparent),
+      .uk-card-primary.uk-card-body,
+      .uk-card-primary > :not([class*="uk-card-media"]),
+      .uk-card-secondary.uk-card-body,
+      .uk-card-secondary > :not([class*="uk-card-media"]),
+      .uk-light,
+      .uk-overlay-primary,
+      .uk-section-primary:not(.uk-preserve-color),
+      .uk-section-secondary:not(.uk-preserve-color),
+      .uk-tile-primary:not(.uk-preserve-color),
+      .uk-tile-secondary:not(.uk-preserve-color) {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .uk-inactive {
+        color: whitesmoke;
+      }
+    </style>
+  </head>
+
+  <body style="margin: 5%">
+    <div class="uk-container">
+      <nav class="uk-navbar-container" style="margin-bottom: 5%">
+        <div class="uk-container tm-navbar-container uk-light uk-sticky">
+          <div uk-navbar>
+            <div class="uk-navbar-left">
+              <ul class="uk-navbar-nav">
+                <li class="uk-active uk-link">
+                  <a href="/" class="">Bootstrap Todo</a>
+                </li>
+                <li class="uk-active uk-link animated-underline">
+                  <a href="/examples">UIKit Demo</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="uk-grid-small uk-text-right" uk-grid>
+        <h1 class="uk-align-left">HTMX Films Grid...</h1>
+        <button
+          class="uk-button uk-button-default uk-button-small uk-align-right uk-button uk-button-primary"
+          hx-get="/add-film-modal/"
+          hx-target="#show-modals-here"
+          _="on htmx:afterOnLoad wait 20ms then add .uk-open to #modal"
+        >
+          Add film
+        </button>
+      </div>
+      <div id="grid-display" style="margin-top: 3%; margin-bottom: 3%">
+        {{ block "film-list-element" .}}
+        <ul
+          class="uk-grid-small uk-text-center uk-child-width-1-3@s uk-flex-start"
+          uk-sortable="handle: .uk-card" 
+          uk-grid
+        >
+          {{ range .films }}
+          <li>
+            <div
+              class="uk-card uk-card-default uk-card-body uk-animation-scale-up"
+              tabindex="0"
+              id="item{{ .Title }}"
+              _="on htmx:afterOnLoad wait 20ms then add .uk-open to #modal"
+            >
+              <div
+                class="uk-heading-line uk-text-center"
+                style="padding-bottom: 5%"
+              >
+                <span class="uk-text-bold uk-text-large">
+                  <label hidden>Title</label>
+                  {{ .Title }}
+                </span>
+              </div>
+
+              <div class="uk-card-body">
+                <span> {{ .Director }} </span>
+              </div>
+
+              <nav class="uk-navbar-container" uk-navbar>
+                <div class="uk-navbar-left">
+                  <button
+                    class="uk-button uk-button-default uk-button-small"
+                    hx-get="/uikit-modal/{{ .Title }}/{{ .Director }}"
+                    hx-target="#show-modals-here"
+                  >
+                    <span uk-icon="pencil"></span>
+                  </button>
+                </div>
+                <div class="uk-navbar-right">
+                  <button
+                    class="uk-button uk-button-default uk-button-small"
+                    hx-swap="delete"
+                    hx-target="closest .uk-card"
+                    hx-delete="/delete-film/{{ .Title }}"
+                    hx-confirm="Are you sure you want to delete it?"
+                  >
+                    <span uk-icon="trash"></span>
+                  </button>
+                </div>
+              </nav>
+            </div>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </div>
+
+      <div id="show-modals-here"></div>
+    </div>
+  </body>
+</html>
