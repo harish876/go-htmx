@@ -20,19 +20,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	h1 := func(w http.ResponseWriter, r *http.Request) {
-		films := make(map[string][]Film)
-		tmpl := template.Must(template.ParseFiles("templates/index.html"))
-		rows, _ := database.Query("SELECT title,Director from films")
+	// h1 := func(w http.ResponseWriter, r *http.Request) {
+	// 	films := make(map[string][]Film)
+	// 	tmpl := template.Must(template.ParseFiles("templates/index.html"))
+	// 	rows, _ := database.Query("SELECT title,Director from films")
 
-		for rows.Next() {
-			var film Film
-			rows.Scan(&film.Title, &film.Director)
-			films["films"] = append(films["films"], film)
-		}
+	// 	for rows.Next() {
+	// 		var film Film
+	// 		rows.Scan(&film.Title, &film.Director)
+	// 		films["films"] = append(films["films"], film)
+	// 	}
 
-		tmpl.Execute(w, films)
-	}
+	// 	tmpl.Execute(w, films)
+	// }
 
 	h2 := func(w http.ResponseWriter, r *http.Request) {
 		Title := r.PostFormValue("title")
@@ -132,12 +132,12 @@ func main() {
 		tmpl.Execute(w, nil)
 	}
 
-	http.HandleFunc("/", h1)
+	http.HandleFunc("/", h5)
 	http.HandleFunc("/add-film/", h2)
 	http.HandleFunc("/add-film-modal/", h7)
 	http.HandleFunc("/delete-film/", h3)
 	http.HandleFunc("/uikit-modal/", h4)
-	http.HandleFunc("/examples/", h5)
+	// http.HandleFunc("/examples/", h5)
 	http.HandleFunc("/edit-film/", h6)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
